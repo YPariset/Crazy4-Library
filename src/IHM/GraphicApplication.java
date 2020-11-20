@@ -3,6 +3,7 @@ package IHM;
 import Library.Library;
 
 import javax.swing.*;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +27,7 @@ public class GraphicApplication extends JFrame {
         /********************************************************/
 
         Library myLibrary = new Library();
-        
+
         /***********************************************************/
         /***************** Configuration of JPanel *****************/
         /***********************************************************/
@@ -113,21 +114,36 @@ public class GraphicApplication extends JFrame {
         labelButtonRadio.setForeground(Color.white);
 
         JRadioButton buttonTypeManga = new JRadioButton("Manga");
+        buttonTypeManga.setActionCommand("Manga");
         buttonTypeManga.setForeground(Color.white);
 
         JRadioButton buttonNovel = new JRadioButton("Novel");
+        buttonNovel.setActionCommand("Novel");
         buttonNovel.setForeground(Color.white);
 
         JRadioButton buttonMagazine = new JRadioButton("Magazine");
+        buttonMagazine.setActionCommand("Magazine");
         buttonMagazine.setForeground(Color.white);
+
+        ButtonGroup buttonGroup= new ButtonGroup();
+        buttonGroup.add(buttonTypeManga);
+        buttonGroup.add(buttonNovel);
+        buttonGroup.add(buttonMagazine);
 
         JLabel labelConfirm = new JLabel();
         labelConfirm.setText("New book added in the library !");
         labelConfirm.setForeground(Color.white);
         labelConfirm.setFont(new Font("Courier New ", Font.BOLD, 15));
 
+        JLabel labelFailure = new JLabel();
+        labelFailure.setText("Please be focus !");
+        labelFailure.setForeground(Color.white);
+        labelFailure.setFont(new Font("Courier New ", Font.BOLD, 15));
+
         JComboBox chooseTypeManga = new JComboBox();
         chooseTypeManga.setVisible(false);
+
+        JOptionPane.showMessageDialog(null, " WARNING - this content is reserved under 18");
 
 
         //Panel Search
@@ -142,7 +158,33 @@ public class GraphicApplication extends JFrame {
 
         JTextArea resultLabel = new JTextArea(20, 28);
 
+        JButton getBookType = new JButton();
+        getBookType.setText("Print type books");
 
+
+        //PanelResult
+        JButton buttonDeleteResult = new JButton("Delete");
+        buttonDeleteResult.setForeground(Color.black);
+
+        JLabel resultTable = new JLabel();
+        Object [][] rec = {
+                { "1", "", "", "", "" },
+                { "2", "", "", "", ""},
+                { "3", "", "", "", ""},
+                { "4", "", "", "", ""},
+                { "5", "", "", "", ""},
+                { "6", "", "", "", ""},
+        };
+
+        String[] header = { "Id", "Title", "Editor", "year", "boolean"};
+        JTable taberesult = new JTable(rec, header);
+
+        TableColumnModel columnModel = taberesult.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(10);
+        columnModel.getColumn(1).setPreferredWidth(70);
+        columnModel.getColumn(2).setPreferredWidth(70);
+        columnModel.getColumn(3).setPreferredWidth(70);
+        columnModel.getColumn(4).setPreferredWidth(70);
 
 
         /***********************************************************/
@@ -170,11 +212,17 @@ public class GraphicApplication extends JFrame {
         paneAddBook.add(buttonValidate);
         paneAddBook.add(chooseTypeManga);
         paneAddBook.add(labelConfirm);
+        paneAddBook.add(labelFailure);
 
         paneSearch.add(getAllBooks);
         paneSearch.add(getBooksStartByA);
         paneSearch.add(getBookODD);
+        paneSearch.add(getBookType);
         paneSearch.add(resultLabel);
+
+        paneResultTable.add(taberesult);
+        paneResultTable.add(buttonDeleteResult);
+
 
 
         /***********************************************************/
@@ -188,7 +236,7 @@ public class GraphicApplication extends JFrame {
         monMenu.add(menuOptions);
 
         JMenuItem subMenuNew = new JMenuItem("Add book");
-        JMenuItem subMenuSearch = new JMenuItem("Search");
+        JMenuItem subMenuSearch = new JMenuItem("Search in the library");
         JMenuItem subMenuResult = new JMenuItem("Result");
         JMenuItem subMenuExit = new JMenuItem("Exit");
 
@@ -196,7 +244,6 @@ public class GraphicApplication extends JFrame {
         menuOptions.add(subMenuSearch);
         menuOptions.add(subMenuResult);
         menuOptions.add(subMenuExit);
-
 
 
         /***********************************************************/
@@ -210,12 +257,23 @@ public class GraphicApplication extends JFrame {
                                              setTitle("Add Book");
 
                                              labelConfirm.setVisible(false);
+                                             labelFailure.setVisible(false);
 
                                              buttonValidate.addActionListener(new ActionListener() {
                                                  public void actionPerformed(ActionEvent e) {
-                                                     labelConfirm.setVisible(true);
-                                                     myLibrary.addBook(textTitle.getText(), textAuthor.getText(), Integer.parseInt(textYear.getText()),textEditor.getText(), textLanguage.getText(), Integer.parseInt(textId.getText()));
 
+                                                     if( buttonTypeManga.isSelected() || buttonNovel.isSelected() ||  buttonMagazine.isSelected()) {
+                                                         String result = buttonGroup.getSelection().getActionCommand();
+                                                         myLibrary.addBook(textTitle.getText(), textAuthor.getText(), Integer.parseInt(textYear.getText()), textEditor.getText(), textLanguage.getText(), Integer.parseInt(textId.getText()),result);
+                                                     }
+                                                     if (textTitle.getText().isEmpty() || textAuthor.getText().isEmpty() || textYear.getText().isEmpty() || textEditor.getText().isEmpty() || textId.getText().isEmpty()) {
+                                                         labelConfirm.setVisible(false);
+                                                         labelFailure.setVisible(true);
+                                                         JOptionPane.showMessageDialog(null, "Uh-oh!", "Error", JOptionPane.ERROR_MESSAGE);
+                                                     } else {
+                                                         labelConfirm.setVisible(true);
+                                                         labelFailure.setVisible(false);
+                                                     }
                                                  }
                                              });
 
@@ -265,6 +323,23 @@ public class GraphicApplication extends JFrame {
                     }
                 });
 
+                getBookType.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+
+                        myLibrary.getBookByType(resultLabel);
+                    }
+                });
+
+                revalidate();
+            }
+        });
+
+        subMenuResult.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setContentPane(paneResultTable);
+                setTitle("Results table");
+                getContentPane().add(taberesult.getTableHeader(), BorderLayout.NORTH);
+                getContentPane().add(taberesult, BorderLayout.CENTER);
                 revalidate();
             }
         });

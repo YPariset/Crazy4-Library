@@ -12,18 +12,20 @@ public class Book {
     private String editor;
     private String language;;
     private int id;
+    private String category;
 
     /****************************************************/
     /***********          Constructor        ************/
     /****************************************************/
 
-    public Book(String title, String author, int year, String editor, String language, int id) {
+    public Book(String title, String author, int year, String editor, String language, int id, String category) {
         this.title = title;
         this.author = author;
         this.year = year;
         this.editor = editor;
         this.language = language;
         this.id = id;
+        this.category = category;
     }
 
     public Book(String title, int id){
@@ -80,6 +82,7 @@ public class Book {
         this.id = id;
     }
 
-
-
+    public String getCategory() {
+        return category;
+    }
 }

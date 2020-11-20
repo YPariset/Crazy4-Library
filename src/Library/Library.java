@@ -19,30 +19,19 @@ public class Library {
 
 
         //Some object already in the Array List
-       bookList.add(new Book("Merci qui ?","Jacquie",1980,"Deluxe","FR",1));
-       bookList.add(new Book("Amour & Amnésie","Le poète",2004,"Classic","FR",2));
-       bookList.add(new Book("Modern Warbook","Captain Price",2099,"Superior","EN",3));
+       bookList.add(new Book("Merci qui ?","Jacquie",1980,"Deluxe","FR",1,"Novel"));
+       bookList.add(new Book("Amour & Amnésie","Le poète",2004,"Classic","FR",2,"Roman"));
+       bookList.add(new Book("Modern Warbook","Captain Price",2099,"Superior","EN",3,"Manga"));
        // bookList.add(new Book("Wesh alors","Le Z",2020,"Universal","FR",4));
 
     }
 
       /** Fonction ajout de livre **/
     /*******************************/
-    public void addBook(String title, String author, int year, String editor, String language, int  id) {
-                Book theBook = new Book(title, author, year, editor, language, id);
+    public void addBook(String title, String author, int year, String editor, String language, int  id, String category) {
+                Book theBook = new Book(title, author, year, editor, language, id, category );
                 bookList.add(theBook);
             }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -53,7 +42,7 @@ public class Library {
         String result = "";                //variable de stockage
         for (Book book : bookList) {       //for each book dans ArrayList
             result += (book.getTitle() + " de " + book.getAuthor() + " (" + book.getYear()+ ")\n"
-                    + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n\n");
+                    + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n Category : " + book.getCategory() + "\n\n");
         }
         resultLabel.setText(result);
 
@@ -68,7 +57,7 @@ public class Library {
             String bookTitle = book.getTitle();
             if (bookTitle.toLowerCase().startsWith("a")) {
                 result += (book.getTitle() + " de " + book.getAuthor() + " (" + book.getYear()+ ")\n"
-                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n\n");
+                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n Category : " + book.getCategory() +  "\n\n");
             }
         }
         resultLabel.setText(result);
@@ -79,10 +68,35 @@ public class Library {
         for (Book book : bookList) {
             if ((book.getId() % 2) != 0) {
                 result += (book.getTitle() + " de " + book.getAuthor() + " (" + book.getYear()+ ")\n"
-                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n\n");
+                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() + "\n Category : " + book.getCategory() + "\n\n");
             }
         }
         resultLabel.setText(result);
+    }
+
+    public void getBookByType(JTextArea resultLabel) {
+        String result = "";
+        for (Book book : bookList) {
+            if(book.getCategory().equals("Manga")) {
+                result += ("MANGA \n" + book.getTitle() + " by " + book.getAuthor() + " (" + book.getYear()+ ")\n"
+                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() +
+                        "\nCategory : " + book.getCategory() + "\n\n");
+                resultLabel.setText(result);
+            }
+            if(book.getCategory().equals("Magazine")) {
+                result += ("MAGAZINE \n" + book.getTitle() + " by " + book.getAuthor() + " (" + book.getYear()+ ")\n"
+                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() +
+                        "\nCategory : " + book.getCategory() + "\n\n");
+                resultLabel.setText(result);
+            }
+            if(book.getCategory().equals("Novel")) {
+                result += ("NOVEL \n" + book.getTitle() + " by " + book.getAuthor() + " (" + book.getYear()+ ")\n"
+                        + "Edition: " + book.getEditor() + ", version : " +book.getLanguage() + ", Reference :  " +book.getId() +
+                        "\nCategory : " + book.getCategory() + "\n\n");
+                resultLabel.setText(result);
+            }
+
+        }
     }
 
     //guetters

@@ -12,6 +12,14 @@ Application de Bibliothèque 📖
                     - Consulter les livres disponibles avec un iD impair
                     - JTable
                     
+                    
+- Travaux effectués en methode agile: SCRUM    
+
+                    - Pair/Mob programming
+                    - Tableau de bord
+                    - Stand up meeting
+                    - Retrospective 
+                   
                    
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
